@@ -26,7 +26,6 @@ public class GridImageView extends ImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Drawable drawable = getDrawable();

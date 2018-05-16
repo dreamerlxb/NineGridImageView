@@ -103,7 +103,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
 
         public void bind(Post post) {
-            mNglContent.setImagesData(post.getImgUrlList(),post.getmSpanType());
+            mNglContent.setImagesData(post.getImgUrlList());
             mTvContent.setText(post.getContent());
 
             Log.d("jaeger", "九宫格高度: " + mNglContent.getMeasuredHeight());
