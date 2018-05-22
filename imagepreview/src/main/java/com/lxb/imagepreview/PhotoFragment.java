@@ -21,7 +21,7 @@ import com.lxb.imagepreview.entity.IThumbViewInfo;
 import com.lxb.imagepreview.loader.MySimpleTarget;
 import com.lxb.imagepreview.widget.SmoothImageView;
 
-public class BasePhotoFragment extends Fragment {
+public class PhotoFragment extends Fragment {
     /**
      * 预览图片 类型
      */
@@ -42,18 +42,13 @@ public class BasePhotoFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_image_photo_layout, container, false);
     }
 
-    public static BasePhotoFragment getInstance(Class<? extends BasePhotoFragment> fragmentClass, IThumbViewInfo item, boolean currentIndex, boolean isSingleFling, boolean isDrag) {
-        BasePhotoFragment fragment;
-        try {
-            fragment = fragmentClass.newInstance();
-        } catch (Exception e) {
-            fragment = new BasePhotoFragment();
-        }
+    public static PhotoFragment newInstance(IThumbViewInfo item, boolean currentIndex, boolean isSingleFling, boolean isDrag) {
+        PhotoFragment fragment = new PhotoFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BasePhotoFragment.KEY_PATH, item);
-        bundle.putBoolean(BasePhotoFragment.KEY_TRANS_PHOTO, currentIndex);
-        bundle.putBoolean(BasePhotoFragment.KEY_SING_FILING, isSingleFling);
-        bundle.putBoolean(BasePhotoFragment.KEY_DRAG, isDrag);
+        bundle.putParcelable(PhotoFragment.KEY_PATH, item);
+        bundle.putBoolean(PhotoFragment.KEY_TRANS_PHOTO, currentIndex);
+        bundle.putBoolean(PhotoFragment.KEY_SING_FILING, isSingleFling);
+        bundle.putBoolean(PhotoFragment.KEY_DRAG, isDrag);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -195,6 +190,13 @@ public class BasePhotoFragment extends Fragment {
                 transformOut();
             }
         });
+
+        imageView.transformIn(new SmoothImageView.onTransformListener() {
+            @Override
+            public void onTransformCompleted(int status) {
+                rootView.setBackgroundColor(Color.BLACK);
+            }
+        });
     }
 
     public static int getColorWithAlpha(float alpha, int baseColor) {
@@ -204,9 +206,12 @@ public class BasePhotoFragment extends Fragment {
     }
 
     public void transformIn() {
+        if (imageView == null) {
+            return;
+        }
         imageView.transformIn(new SmoothImageView.onTransformListener() {
             @Override
-            public void onTransformCompleted(@SmoothImageView.Status int status) {
+            public void onTransformCompleted(int status) {
                 rootView.setBackgroundColor(Color.BLACK);
             }
         });
@@ -228,9 +233,5 @@ public class BasePhotoFragment extends Fragment {
 
     public void changeBg(int color) {
         rootView.setBackgroundColor(color);
-    }
-
-    public IThumbViewInfo getBeanViewInfo() {
-        return beanViewInfo;
     }
 }

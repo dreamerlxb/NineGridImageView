@@ -74,16 +74,6 @@ public final class PreviewBuilder {
     }
 
     /***
-     * 设置数据源
-     * @param className 你的Fragment类
-     * @return PreviewBuilder
-     * **/
-    public PreviewBuilder setUserFragment(@NonNull Class<? extends BasePhotoFragment> className) {
-        intent.putExtra("className", className);
-        return this;
-    }
-
-    /***
      * 设置默认索引
      * @param currentIndex 数据
      * @return PreviewBuilder
