@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 
 /**
  * Created by Jaeger on 16/2/24.
@@ -14,7 +14,7 @@ import android.widget.ImageView;
  * Email: chjie.jaeger@gamil.com
  * GitHub: https://github.com/laobie
  */
-public class GridImageView extends ImageView {
+public class GridImageView extends AppCompatImageView {
 
     public GridImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
