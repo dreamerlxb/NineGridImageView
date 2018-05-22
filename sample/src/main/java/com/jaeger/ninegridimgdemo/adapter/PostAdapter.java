@@ -1,5 +1,6 @@
 package com.jaeger.ninegridimgdemo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,15 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jaeger.ninegridimageview.GridImageView;
-import com.jaeger.ninegridimageview.GridImageView2;
 import com.jaeger.ninegridimageview.ItemImageClickListener;
 import com.jaeger.ninegridimageview.ItemImageLongClickListener;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.jaeger.ninegridimgdemo.R;
+import com.jaeger.ninegridimgdemo.entity.PhotoInfo;
 import com.jaeger.ninegridimgdemo.entity.Post;
+import com.lxb.imagepreview.GPreviewBuilder;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,17 +73,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 Picasso.with(context).load(s).placeholder(R.drawable.ic_default_image).into(imageView);
             }
 
-//            @Override
-//            protected ImageView generateImageView(Context context) {
-////                return super.generateImageView(context);
-//                GridImageView2 imageView = new GridImageView2(context);
-//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                return imageView;
-//            }
-
             @Override
             protected void onItemImageClick(Context context, ImageView imageView, int index, List<String> list) {
                 Toast.makeText(context, "image position is " + index, Toast.LENGTH_SHORT).show();
+                ArrayList<PhotoInfo> photoInfos = new ArrayList<>(4);
+                for (String str : list) {
+                    photoInfos.add(new PhotoInfo(str));
+                }
+                GPreviewBuilder.from((Activity) context)
+                        .setData(photoInfos)
+                        .setCurrentIndex(index)
+                        .setType(GPreviewBuilder.IndicatorType.Dot)
+                        .start();//启动
             }
 
             @Override
@@ -90,7 +94,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         };
 
-        public PostViewHolder(View itemView) {
+        PostViewHolder(View itemView) {
             super(itemView);
             mTvContent = itemView.findViewById(R.id.tv_content);
             mNglContent = itemView.findViewById(R.id.ngl_images);
@@ -110,8 +114,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             });
         }
 
-        public void bind(Post post) {
-            mNglContent.setImagesData(post.getImgUrlList(), post.getmSpanType());
+        void bind(Post post) {
+            mNglContent.setImagesData(post.getImgUrlList(), post.getSpanType());
             mTvContent.setText(post.getContent());
 
             Log.d("jaeger", "九宫格高度: " + mNglContent.getMeasuredHeight());

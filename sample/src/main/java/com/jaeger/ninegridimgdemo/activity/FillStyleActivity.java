@@ -28,8 +28,6 @@ import static com.jaeger.ninegridimageview.NineGridImageView.TOPCOLSPAN;
 public class FillStyleActivity extends BaseActivity {
 
     public static final String CONTENT = "看图，字不重要。想看大图？抱歉我还没做这个 ( •̀ .̫ •́ )";
-    private RecyclerView mRvPostLister;
-    private PostAdapter mPostAdapter;
 
     private List<Post> mPostList;
     private String[] IMG_URL_LIST = {
@@ -52,11 +50,11 @@ public class FillStyleActivity extends BaseActivity {
         setContentView(R.layout.activity_recycler);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        mRvPostLister = findViewById(R.id.rv_post_list);
+        RecyclerView mRvPostLister = findViewById(R.id.rv_post_list);
         mRvPostLister.setLayoutManager(new LinearLayoutManager(this));
 
         fummuyData();
-        mPostAdapter = new PostAdapter(this, mPostList, NineGridImageView.STYLE_FILL);
+        PostAdapter mPostAdapter = new PostAdapter(this, mPostList, NineGridImageView.STYLE_FILL);
         mRvPostLister.setAdapter(mPostAdapter);
     }
 

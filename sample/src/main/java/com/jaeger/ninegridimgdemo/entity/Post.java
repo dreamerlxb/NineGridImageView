@@ -34,11 +34,11 @@ public class Post {
         mContent = content;
     }
 
-    public int getmSpanType() {
+    public int getSpanType() {
         return mSpanType;
     }
 
-    public void setmSpanType(int mSpanType) {
+    public void setSpanType(int mSpanType) {
         this.mSpanType = mSpanType;
     }
 
