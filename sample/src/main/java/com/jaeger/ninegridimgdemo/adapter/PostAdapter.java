@@ -19,18 +19,12 @@ import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.jaeger.ninegridimgdemo.R;
 import com.jaeger.ninegridimgdemo.entity.PhotoInfo;
 import com.jaeger.ninegridimgdemo.entity.Post;
-import com.lxb.imagepreview.GPreviewBuilder;
+import com.lxb.imagepreview.PreviewBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jaeger on 16/2/24.
- *
- * Email: chjie.jaeger@gmail.com
- * GitHub: https://github.com/laobie
- */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private LayoutInflater mInflater;
     private List<Post> mPostList;
@@ -80,10 +74,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 for (String str : list) {
                     photoInfos.add(new PhotoInfo(str));
                 }
-                GPreviewBuilder.from((Activity) context)
+                PreviewBuilder.from((Activity) context)
                         .setData(photoInfos)
                         .setCurrentIndex(index)
-                        .setType(GPreviewBuilder.IndicatorType.Dot)
+                        .setSingleFling(true)
+                        .setSingleShowType(false)
+                        .setType(PreviewBuilder.IndicatorType.Number)
                         .start();//启动
             }
 

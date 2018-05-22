@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -21,16 +22,20 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.lxb.imagepreview.ImageUtils;
 import com.lxb.imagepreview.R;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 public class SmoothImageView extends PhotoView {
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_IN = 1;
+    public static final int STATE_OUT = 2;
+    public static final int STATE_MOVE = 3;
 
-    public enum Status {
-        STATE_NORMAL,
-        STATE_IN,
-        STATE_OUT,
-        STATE_MOVE,
-    }
+    @IntDef({STATE_NORMAL, STATE_IN, STATE_OUT, STATE_MOVE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Status {}
 
-    private Status mStatus = Status.STATE_NORMAL;
+    private @Status int mStatus = STATE_NORMAL;
     private static int TRANSFORM_DURATION = 400;
     private Paint mPaint;
     private Matrix matrix;
@@ -85,7 +90,7 @@ public class SmoothImageView extends PhotoView {
             return;
         }
 
-        if (mStatus == Status.STATE_OUT || mStatus == Status.STATE_IN) {
+        if (mStatus == STATE_OUT || mStatus == STATE_IN) {
             if (startTransform == null || endTransform == null || animTransform == null) {
                 initTransform();
             }
@@ -111,7 +116,7 @@ public class SmoothImageView extends PhotoView {
             if (transformStart) {
                 startTransform();
             }
-        } else if (mStatus == Status.STATE_MOVE) {
+        } else if (mStatus == STATE_MOVE) {
             mPaint.setAlpha(0);
             canvas.drawPaint(mPaint);
             super.onDraw(canvas);
@@ -170,7 +175,7 @@ public class SmoothImageView extends PhotoView {
                         }
                         // 一指滑动时，才对图片进行移动缩放处理
                         if (event.getPointerCount() == 1) {
-                            mStatus = Status.STATE_MOVE;
+                            mStatus = STATE_MOVE;
                             offsetLeftAndRight(offsetX);
                             offsetTopAndBottom(offsetY);
                             float scale = moveScale();
@@ -324,7 +329,7 @@ public class SmoothImageView extends PhotoView {
         animator = new ValueAnimator();
         animator.setDuration(TRANSFORM_DURATION);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        if (mStatus == Status.STATE_IN) {
+        if (mStatus == STATE_IN) {
             PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("animScale", startTransform.scale, endTransform.scale);
             PropertyValuesHolder alphaHolder = PropertyValuesHolder.ofInt("animAlpha", startTransform.alpha, endTransform.alpha);
             PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("animLeft", startTransform.left, endTransform.left);
@@ -332,7 +337,7 @@ public class SmoothImageView extends PhotoView {
             PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("animWidth", startTransform.width, endTransform.width);
             PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("animHeight", startTransform.height, endTransform.height);
             animator.setValues(scaleHolder, alphaHolder, leftHolder, topHolder, widthHolder, heightHolder);
-        } else if (mStatus == Status.STATE_OUT) {
+        } else if (mStatus == STATE_OUT) {
             PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("animScale", endTransform.scale, startTransform.scale);
             PropertyValuesHolder alphaHolder = PropertyValuesHolder.ofInt("animAlpha", endTransform.alpha, startTransform.alpha);
             PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("animLeft", endTransform.left, startTransform.left);
@@ -371,8 +376,8 @@ public class SmoothImageView extends PhotoView {
                 if (onTransformListener != null) {
                     onTransformListener.onTransformCompleted(mStatus);
                 }
-                if (mStatus == Status.STATE_IN) {
-                    mStatus = Status.STATE_NORMAL;
+                if (mStatus == STATE_IN) {
+                    mStatus = STATE_NORMAL;
                 }
             }
         });
@@ -383,7 +388,7 @@ public class SmoothImageView extends PhotoView {
     public void transformIn(onTransformListener listener) {
         setOnTransformListener(listener);
         transformStart = true;
-        mStatus = Status.STATE_IN;
+        mStatus = STATE_IN;
         invalidate();
     }
 
@@ -400,7 +405,7 @@ public class SmoothImageView extends PhotoView {
         }
         setOnTransformListener(listener);
         transformStart = true;
-        mStatus = Status.STATE_OUT;
+        mStatus = STATE_OUT;
         invalidate();
     }
 
@@ -461,9 +466,9 @@ public class SmoothImageView extends PhotoView {
         endTransform.width = endBitmapWidth;
         endTransform.height = endBitmapHeight;
 
-        if (mStatus == Status.STATE_IN) {
+        if (mStatus == STATE_IN) {
             animTransform = startTransform.clone();
-        } else if (mStatus == Status.STATE_OUT) {
+        } else if (mStatus == STATE_OUT) {
             animTransform = endTransform.clone();
         }
         markTransform = endTransform;
@@ -476,7 +481,7 @@ public class SmoothImageView extends PhotoView {
     }
 
     public interface onTransformListener {
-        void onTransformCompleted(Status status);
+        void onTransformCompleted(@Status int status);
 
     }
 

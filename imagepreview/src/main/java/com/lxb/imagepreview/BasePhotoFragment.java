@@ -171,18 +171,14 @@ public class BasePhotoFragment extends Fragment {
             imageView.setOnViewTapListener(new OnViewTapListener() {
                 @Override
                 public void onViewTap(View view, float x, float y) {
-                    if (imageView.checkMinScale()) {
-                        ((GPreviewActivity) getActivity()).transformOut();
-                    }
+                    transformOut();
                 }
             });
         } else {
             imageView.setOnPhotoTapListener(new OnPhotoTapListener() {
                 @Override
                 public void onPhotoTap(ImageView view, float x, float y) {
-                    if (imageView.checkMinScale()) {
-                        ((GPreviewActivity) getActivity()).transformOut();
-                    }
+                    transformOut();
                 }
             });
         }
@@ -196,9 +192,7 @@ public class BasePhotoFragment extends Fragment {
         imageView.setTransformOutListener(new SmoothImageView.OnTransformOutListener() {
             @Override
             public void onTransformOut() {
-                if (imageView.checkMinScale()) {
-                    ((GPreviewActivity) getActivity()).transformOut();
-                }
+                transformOut();
             }
         });
     }
@@ -212,28 +206,25 @@ public class BasePhotoFragment extends Fragment {
     public void transformIn() {
         imageView.transformIn(new SmoothImageView.onTransformListener() {
             @Override
-            public void onTransformCompleted(SmoothImageView.Status status) {
+            public void onTransformCompleted(@SmoothImageView.Status int status) {
                 rootView.setBackgroundColor(Color.BLACK);
             }
         });
     }
 
-    public void transformOut(SmoothImageView.onTransformListener listener) {
-        imageView.transformOut(listener);
-    }
+    private void transformOut() {
 
-//    public void resetMatrix() {
-////        if (imageView != null) {
-////            imageView.getMatrix().reset();
-////            PhotoViewAttacher photoViewAttacher = imageView.getAttacher();
-////            if (photoViewAttacher != null) {
-////                photoViewAttacher.cleanup();
-//////                photoViewAttacher.
-////                photoViewAttacher.resetMatrix();
-////            }
-//////            imageView.resetMatrix();
-////        }
-//    }
+        final PreviewActivity previewActivity = (PreviewActivity) getActivity();
+
+        rootView.setBackgroundColor(Color.TRANSPARENT);
+        changeBg(Color.TRANSPARENT);
+        imageView.transformOut(new SmoothImageView.onTransformListener() {
+            @Override
+            public void onTransformCompleted(@SmoothImageView.Status int status) {
+                previewActivity.exit();
+            }
+        });
+    }
 
     public void changeBg(int color) {
         rootView.setBackgroundColor(color);

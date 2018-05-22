@@ -27,5 +27,5 @@ public interface IZoomMediaLoader {
      *
      * @param c 容器
      **/
-    void clearMemory(@NonNull Context c);
+    void clearMemory(@NonNull Context context);
 }

@@ -127,8 +127,8 @@ public class BezierBannerView extends View implements ViewPager.OnPageChangeList
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.BezierBannerView);
         mSelectedColor = typedArray.getColor(R.styleable.BezierBannerView_selectedColor, 0xFFFFFFFF);
         mUnSelectedColor = typedArray.getColor(R.styleable.BezierBannerView_unSelectedColor, 0xFFAAAAAA);
-        mRadius = typedArray.getDimension(R.styleable.BezierBannerView_selectedRaduis, mRadius);
-        mNomarlRadius = typedArray.getDimension(R.styleable.BezierBannerView_unSelectedRaduis, mNomarlRadius);
+        mRadius = typedArray.getDimension(R.styleable.BezierBannerView_selectedRadius, mRadius);
+        mNomarlRadius = typedArray.getDimension(R.styleable.BezierBannerView_unSelectedRadius, mNomarlRadius);
         distance = typedArray.getDimension(R.styleable.BezierBannerView_spacing, distance);
         typedArray.recycle();
     }

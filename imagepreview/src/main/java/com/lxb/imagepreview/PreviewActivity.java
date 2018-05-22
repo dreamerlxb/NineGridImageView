@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,9 +24,9 @@ import com.lxb.imagepreview.widget.SmoothImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GPreviewActivity extends AppCompatActivity {
-    private static final String TAG = GPreviewActivity.class.getName();
-    private boolean isTransformOut = false;
+public class PreviewActivity extends AppCompatActivity {
+    private static final String TAG = PreviewActivity.class.getName();
+//    private boolean isTransformOut = false;
     /*** 图片的地址***/
     private ArrayList<IThumbViewInfo> imgUrls;
     /*** 当前图片的位置 ***/
@@ -41,7 +40,7 @@ public class GPreviewActivity extends AppCompatActivity {
     /***指示器控件**/
     private BezierBannerView bezierBannerView;
     /***指示器类型枚举***/
-    private GPreviewBuilder.IndicatorType type;
+    private PreviewBuilder.IndicatorType type;
     /***默认显示***/
     private boolean isShow = true;
 
@@ -49,11 +48,10 @@ public class GPreviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (setContentLayout() == 0) {
-            setContentView(R.layout.activity_image_preview_photo);
-        } else {
-            setContentView(setContentLayout());
-        }
+        setContentView(R.layout.activity_image_preview_photo);
+        View view = findViewById(R.id.img_preview_fl);
+        view.setBackgroundColor(Color.TRANSPARENT);
+
         initData();
         initView();
     }
@@ -84,16 +82,16 @@ public class GPreviewActivity extends AppCompatActivity {
     private void initData() {
         imgUrls = getIntent().getParcelableArrayListExtra("imagePaths");
         currentIndex = getIntent().getIntExtra("position", -1);
-        type = (GPreviewBuilder.IndicatorType) getIntent().getSerializableExtra("type");
+        type = (PreviewBuilder.IndicatorType) getIntent().getSerializableExtra("type");
         isShow = getIntent().getBooleanExtra("isShow", true);
         int duration = getIntent().getIntExtra("duration", 300);
         try {
             SmoothImageView.setDuration(duration);
             Class<? extends BasePhotoFragment> sss;
             sss = (Class<? extends BasePhotoFragment>) getIntent().getSerializableExtra("className");
-            iniFragment(imgUrls, currentIndex, sss);
+            initFragment(imgUrls, currentIndex, sss);
         } catch (Exception e) {
-            iniFragment(imgUrls, currentIndex, BasePhotoFragment.class);
+            initFragment(imgUrls, currentIndex, BasePhotoFragment.class);
         }
     }
 
@@ -104,7 +102,7 @@ public class GPreviewActivity extends AppCompatActivity {
      * @param currentIndex 选中索引
      * @param className    显示Fragment
      **/
-    protected void iniFragment(List<IThumbViewInfo> imgUrls, int currentIndex, Class<? extends BasePhotoFragment> className) {
+    protected void initFragment(List<IThumbViewInfo> imgUrls, int currentIndex, Class<? extends BasePhotoFragment> className) {
         if (imgUrls != null) {
             int size = imgUrls.size();
             boolean s = getIntent().getBooleanExtra("isSingleFling", false);
@@ -130,7 +128,7 @@ public class GPreviewActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(3);
         bezierBannerView = findViewById(R.id.bezierBannerView);
         ltAddDot = findViewById(R.id.ltAddDot);
-        if (type == GPreviewBuilder.IndicatorType.Dot) {
+        if (type == PreviewBuilder.IndicatorType.Dot) {
             bezierBannerView.setVisibility(View.VISIBLE);
             bezierBannerView.attachToViewpager(viewPager);
         } else {
@@ -158,7 +156,7 @@ public class GPreviewActivity extends AppCompatActivity {
                 }
             });
         }
-        if (fragments.size() == 1) {
+        if (imgUrls.size() == 1) {
             if (!isShow) {
                 bezierBannerView.setVisibility(View.GONE);
                 ltAddDot.setVisibility(View.GONE);
@@ -177,33 +175,6 @@ public class GPreviewActivity extends AppCompatActivity {
         }
     };
 
-    /***退出预览的动画***/
-    public void transformOut() {
-        if (isTransformOut) {
-            return;
-        }
-        isTransformOut = true;
-        int currentItem = viewPager.getCurrentItem();
-        if (currentItem < imgUrls.size()) {
-            BasePhotoFragment fragment = fragments.get(currentItem);
-            if (ltAddDot != null) {
-                ltAddDot.setVisibility(View.GONE);
-            } else {
-                bezierBannerView.setVisibility(View.GONE);
-            }
-            fragment.changeBg(Color.TRANSPARENT);
-            fragment.transformOut(new SmoothImageView.onTransformListener() {
-                @Override
-                public void onTransformCompleted(SmoothImageView.Status status) {
-                    exit();
-                }
-            });
-        } else {
-            exit();
-        }
-    }
-
-
     /***
      * 得到PhotoFragment集合
      * @return List
@@ -215,7 +186,7 @@ public class GPreviewActivity extends AppCompatActivity {
     /**
      * 关闭页面
      */
-    private void exit() {
+    public void exit() {
         finish();
         overridePendingTransition(0, 0);
     }
@@ -234,11 +205,6 @@ public class GPreviewActivity extends AppCompatActivity {
      ***/
     public int setContentLayout() {
         return 0;
-    }
-
-    @Override
-    public void onBackPressed() {
-        transformOut();
     }
 
     /**
