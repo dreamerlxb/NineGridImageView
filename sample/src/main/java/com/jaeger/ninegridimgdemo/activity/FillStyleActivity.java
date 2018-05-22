@@ -52,7 +52,7 @@ public class FillStyleActivity extends BaseActivity {
         setContentView(R.layout.activity_recycler);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        mRvPostLister = (RecyclerView) findViewById(R.id.rv_post_list);
+        mRvPostLister = findViewById(R.id.rv_post_list);
         mRvPostLister.setLayoutManager(new LinearLayoutManager(this));
 
         fummuyData();

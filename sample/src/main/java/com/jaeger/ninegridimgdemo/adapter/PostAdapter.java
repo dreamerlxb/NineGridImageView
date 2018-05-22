@@ -1,6 +1,7 @@
 package com.jaeger.ninegridimgdemo.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jaeger.ninegridimageview.GridImageView;
+import com.jaeger.ninegridimageview.GridImageView2;
 import com.jaeger.ninegridimageview.ItemImageClickListener;
 import com.jaeger.ninegridimageview.ItemImageLongClickListener;
 import com.jaeger.ninegridimageview.NineGridImageView;
@@ -37,7 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(PostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         holder.bind(mPostList.get(position));
     }
 
@@ -46,8 +50,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return mPostList.size();
     }
 
+    @NonNull
     @Override
-    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (mShowStyle == NineGridImageView.STYLE_FILL) {
             return new PostViewHolder(mInflater.inflate(R.layout.item_post_fill_style, parent, false));
         } else {
@@ -55,7 +60,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
     }
 
-    public class PostViewHolder extends RecyclerView.ViewHolder {
+    class PostViewHolder extends RecyclerView.ViewHolder {
         private NineGridImageView<String> mNglContent;
         private TextView mTvContent;
 
@@ -65,10 +70,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 Picasso.with(context).load(s).placeholder(R.drawable.ic_default_image).into(imageView);
             }
 
-            @Override
-            protected ImageView generateImageView(Context context) {
-                return super.generateImageView(context);
-            }
+//            @Override
+//            protected ImageView generateImageView(Context context) {
+////                return super.generateImageView(context);
+//                GridImageView2 imageView = new GridImageView2(context);
+//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                return imageView;
+//            }
 
             @Override
             protected void onItemImageClick(Context context, ImageView imageView, int index, List<String> list) {
@@ -84,8 +92,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         public PostViewHolder(View itemView) {
             super(itemView);
-            mTvContent = (TextView) itemView.findViewById(R.id.tv_content);
-            mNglContent = (NineGridImageView<String>) itemView.findViewById(R.id.ngl_images);
+            mTvContent = itemView.findViewById(R.id.tv_content);
+            mNglContent = itemView.findViewById(R.id.ngl_images);
             mNglContent.setAdapter(mAdapter);
             mNglContent.setItemImageClickListener(new ItemImageClickListener<String>() {
                 @Override
@@ -103,7 +111,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
 
         public void bind(Post post) {
-            mNglContent.setImagesData(post.getImgUrlList());
+            mNglContent.setImagesData(post.getImgUrlList(), post.getmSpanType());
             mTvContent.setText(post.getContent());
 
             Log.d("jaeger", "九宫格高度: " + mNglContent.getMeasuredHeight());

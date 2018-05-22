@@ -48,7 +48,7 @@ public class GridStyleActivity extends BaseActivity {
         setContentView(R.layout.activity_recycler);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        mRvPostLister = (RecyclerView) findViewById(R.id.rv_post_list);
+        mRvPostLister = findViewById(R.id.rv_post_list);
         final LinearLayoutManager manager = new LinearLayoutManager(this);
         mRvPostLister.setLayoutManager(manager);
 

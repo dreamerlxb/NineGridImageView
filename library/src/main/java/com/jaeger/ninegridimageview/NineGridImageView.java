@@ -2,6 +2,7 @@ package com.jaeger.ninegridimageview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -88,6 +89,10 @@ public class NineGridImageView<T> extends ViewGroup {
     private void layoutChildrenView() {
         if (mImgDataList == null) return;
         int showChildrenCount = getNeedShowCount(mImgDataList.size());
+        if (mShowStyle == STYLE_GRID && showChildrenCount == 4) {
+            layoutForFourGridStyleChildrenView(showChildrenCount);
+            return;
+        }
         //对不跨行不跨列的进行排版布局,单张或者2张默认进行普通排版
         if (mSpanType == NOSPAN || showChildrenCount <= 2) {
             layoutForNoSpanChildrenView(showChildrenCount);
@@ -109,6 +114,29 @@ public class NineGridImageView<T> extends ViewGroup {
             default:
                 layoutForNoSpanChildrenView(showChildrenCount);
                 break;
+        }
+    }
+
+    /**
+     * 图片数为四张时，且格式为style时，特殊处理一下
+     * 当style为grid时，且显示四张图片时，显示为2x2
+     * @param childrenCount 显示的图片个数
+     */
+    private void layoutForFourGridStyleChildrenView(int childrenCount) {
+        if (childrenCount <= 0) return;
+        int row, column, left, top, right, bottom;
+        for (int i = 0; i < childrenCount; i++) {
+            ImageView childrenView = (ImageView) getChildAt(i);
+            row = i / 2;
+            column = i % 2;
+            left = (mGridSize + mGap) * column + getPaddingLeft();
+            top = (mGridSize + mGap) * row + getPaddingTop();
+            right = left + mGridSize;
+            bottom = top + mGridSize;
+            childrenView.layout(left, top, right, bottom);
+            if (mAdapter != null) {
+                mAdapter.onDisplayImage(getContext(), childrenView, mImgDataList.get(i));
+            }
         }
     }
 
@@ -510,7 +538,7 @@ public class NineGridImageView<T> extends ViewGroup {
      * @param imagesSize 图片数量
      * @param gridParam  单元格的行数和列数
      */
-    private void generatUnitRowAndColumnForSpanType(int imagesSize, int[] gridParam) {
+    private void generateUnitRowAndColumnForSpanType(int imagesSize, int[] gridParam) {
         if (imagesSize <= 2) {
             gridParam[0] = 1;
             gridParam[1] = imagesSize;
@@ -658,7 +686,7 @@ public class NineGridImageView<T> extends ViewGroup {
         int[] gridParam = new int[2];
         switch (showStyle) {
             case STYLE_FILL:
-                generatUnitRowAndColumnForSpanType(imagesSize, gridParam);
+                generateUnitRowAndColumnForSpanType(imagesSize, gridParam);
                 break;
             default:
             case STYLE_GRID:
@@ -673,7 +701,7 @@ public class NineGridImageView<T> extends ViewGroup {
      *
      * @param adapter 适配器
      */
-    public void setAdapter(NineGridImageViewAdapter adapter) {
+    public void setAdapter(@NonNull NineGridImageViewAdapter adapter) {
         mAdapter = adapter;
     }
 

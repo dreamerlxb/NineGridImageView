@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
-public class GridImageViewWrapper extends AppCompatImageView {
+public class GridImageView2 extends AppCompatImageView {
 
     private int moreNum = 0;              //显示更多的数量
     private int maskColor = 0x88000000;   //默认的遮盖颜色
@@ -23,15 +23,15 @@ public class GridImageViewWrapper extends AppCompatImageView {
     private TextPaint textPaint;              //文字的画笔
     private String msg = "";                  //要绘制的文字
 
-    public GridImageViewWrapper(Context context) {
+    public GridImageView2(Context context) {
         this(context, null);
     }
 
-    public GridImageViewWrapper(Context context, AttributeSet attrs) {
+    public GridImageView2(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GridImageViewWrapper(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GridImageView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         //转化单位
