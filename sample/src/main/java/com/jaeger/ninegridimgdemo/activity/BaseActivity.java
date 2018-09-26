@@ -9,19 +9,24 @@ import com.jaeger.ninegridimgdemo.ViewServer;
  *
  * Email: chjie.jaeger@gmail.com
  * GitHub: https://github.com/laobie
+ *
+ * @author tiger
  */
 public class BaseActivity extends AppCompatActivity {
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ViewServer.get(this).addWindow(this);
     }
 
+    @Override
     public void onDestroy() {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         ViewServer.get(this).setFocusedWindow(this);

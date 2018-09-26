@@ -13,6 +13,8 @@ import android.view.MotionEvent;
  *
  * Email: chjie.jaeger@gamil.com
  * GitHub: https://github.com/laobie
+ *
+ * @author tiger
  */
 public class GridImageView extends AppCompatImageView {
 
@@ -41,6 +43,8 @@ public class GridImageView extends AppCompatImageView {
                 if (drawableUp != null) {
                     drawableUp.mutate().clearColorFilter();
                 }
+                break;
+            default:
                 break;
         }
 

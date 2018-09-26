@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimgdemo.R;
 import com.jaeger.ninegridimgdemo.adapter.PostAdapter;
@@ -54,8 +55,8 @@ public class GridStyleActivity extends BaseActivity {
 
         mPostList = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
-            List<String> imgUrls = new ArrayList<>();
-            imgUrls.addAll(Arrays.asList(IMG_URL_LIST).subList(0, i % 9));
+            List<String> imgUrls = new ArrayList<>(Arrays.asList(IMG_URL_LIST).subList(0, i % 9));
+
             Post post = new Post("Am I handsome? Am I handsome? Am I handsome?", imgUrls);
             mPostList.add(post);
         }
@@ -68,9 +69,36 @@ public class GridStyleActivity extends BaseActivity {
             @Override
             public void run() {
                 View view = manager.findViewByPosition(1);
-                if (view != null) System.out.println(view.getMeasuredHeight());
+                if (view != null) {
+                    System.out.println(view.getMeasuredHeight());
+                }
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Glide.with(this)
+                .onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Glide.with(this)
+                .onStart();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Glide.with(this)
+                .onDestroy();
     }
 }
 

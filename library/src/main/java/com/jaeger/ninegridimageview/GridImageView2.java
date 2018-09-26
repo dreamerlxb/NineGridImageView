@@ -85,6 +85,8 @@ public class GridImageView2 extends AppCompatImageView {
                     ViewCompat.postInvalidateOnAnimation(this);
                 }
                 break;
+            default:
+                break;
         }
 
         return super.onTouchEvent(event);
