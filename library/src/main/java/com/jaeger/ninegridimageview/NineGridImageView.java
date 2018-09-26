@@ -40,18 +40,50 @@ public class NineGridImageView<T> extends ViewGroup {
      * // 首行跨列
      */
     public final static int TOPCOLSPAN = 2;
-    public final static int BOTTOMCOLSPAN = 3;  // 末行跨列
-    public final static int LEFTROWSPAN = 4;    // 首列跨行
 
-    private int mRowCount;                      // 行数
-    private int mColumnCount;                   // 列数
+    /**
+     * // 末行跨列
+     */
+    public final static int BOTTOMCOLSPAN = 3;
+    /**
+     * // 首列跨行
+     */
+    public final static int LEFTROWSPAN = 4;
 
-    private int mMaxSize;                       // 最大图片数
-    private int mShowStyle;                     // 显示风格
-    private int mGap;                           // 宫格间距
-    private int mSingleImgSize;                 // 单张图片时的尺寸
-    private int mGridSize;                      // 宫格大小,即图片大小
-    private int mSpanType;                      // 跨行跨列的类型
+    /**
+     * // 行数
+     */
+    private int mRowCount;
+    /**
+     * // 列数
+     */
+    private int mColumnCount;
+
+    /**
+     * // 最大图片数
+     */
+    private int mMaxSize;
+
+    /**
+     * // 显示风格
+     */
+    private int mShowStyle;
+    /**
+     * // 宫格间距
+     */
+    private int mGap;
+    /**
+     * // 单张图片时的尺寸
+     */
+    private int mSingleImgSize;
+    /**
+     * // 宫格大小,即图片大小
+     */
+    private int mGridSize;
+    /**
+     * // 跨行跨列的类型
+     */
+    private int mSpanType;
 
     private List<ImageView> mImageViewList = new ArrayList<>();
     private List<T> mImgDataList;
